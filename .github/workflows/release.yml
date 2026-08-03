@@ -38,6 +38,15 @@ jobs:
             -format UDZO \
             Espresso.dmg
 
+      - name: Create GitHub Release
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            Espresso.dmg \
+            --title "Espresso $GITHUB_REF_NAME" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Prepare landing page
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
@@ -52,12 +61,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deploy-pages
         uses: actions/deploy-pages@v4
-
-      - name: Create GitHub Release
-        run: |
-          gh release create "$GITHUB_REF_NAME" \
-            Espresso.dmg \
-            --title "Espresso $GITHUB_REF_NAME" \
-            --generate-notes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
