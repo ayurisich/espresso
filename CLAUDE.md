@@ -17,12 +17,18 @@ Written in Go. No dock icon (`LSUIElement = true`).
 | `docs/index.html` | Landing page template — contains `{{VERSION}}` placeholder |
 | `.github/workflows/release.yml` | Release pipeline |
 
-## Build
+## Build & local dev workflow
 
 ```bash
-make build          # produces Espresso.app in the project root
-make clean          # removes binary and Espresso.app
+make build          # compile + assemble Espresso.app in the project root
+make install        # build → ad-hoc sign → install to ~/Applications → launch
+make uninstall      # kill running process + remove from ~/Applications
+make smoke          # full lifecycle: install, verify running, crash-check, uninstall
+make clean          # remove binary, Espresso.app, and any generated iconset
 ```
+
+`make install` clears the Gatekeeper quarantine flag, so the app opens without
+needing "Open Anyway" or right-click → Open. Use this during development.
 
 Requires macOS and Go 1.21+. The CGO login item code links against
 ServiceManagement and Foundation frameworks — no extra setup needed.

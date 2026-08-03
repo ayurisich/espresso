@@ -25,7 +25,7 @@ jobs:
 
       - name: Sign app (ad-hoc)
         run: |
-          codesign --sign - --force --deep --options runtime Espresso.app
+          codesign --sign - --force --deep Espresso.app
           xattr -cr Espresso.app
 
       - name: Package DMG
