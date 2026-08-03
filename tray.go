@@ -114,5 +114,6 @@ func startTimed(m *Manager, hours int, setOn, setOff func()) {
 		setOff()
 		return
 	}
+	setOff() // stop existing animation goroutine before starting a new one
 	setOn()
 }
