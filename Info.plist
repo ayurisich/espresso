@@ -17,5 +17,7 @@
     <string>NSApplication</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
 </dict>
 </plist>

@@ -53,6 +53,11 @@ func (m *Manager) launch(args ...string) error {
 		return err
 	}
 	m.cmd = cmd
+	// Drain any buffered expiry from a prior timed session — stale after a new launch.
+	select {
+	case <-m.Expired:
+	default:
+	}
 	m.mu.Unlock()
 
 	go func() {
