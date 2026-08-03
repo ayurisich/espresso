@@ -50,7 +50,7 @@ GitHub Actions takes it from there:
 
 **Important:** `docs/index.html` contains a `{{VERSION}}` placeholder that
 Actions replaces at deploy time. Do not manually edit the version string in
-that file — it will be overwritten on the next release.
+that file — Actions processes it at deploy time into `_site/index.html`; `docs/index.html` always stays as the `{{VERSION}}` template.
 
 ## GitHub Pages
 
