@@ -5,17 +5,11 @@ on:
     tags:
       - 'v*'
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
-  release:
+  build-release:
     runs-on: macos-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy-pages.outputs.page_url }}
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -58,6 +52,17 @@ jobs:
         with:
           path: _site/
 
+  deploy-pages:
+    needs: build-release
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy-pages.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deploy-pages
         uses: actions/deploy-pages@v4
