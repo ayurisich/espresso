@@ -23,6 +23,11 @@ jobs:
       - name: Build app
         run: make build
 
+      - name: Sign app (ad-hoc)
+        run: |
+          codesign --sign - --force --deep --options runtime Espresso.app
+          xattr -cr Espresso.app
+
       - name: Package DMG
         run: |
           hdiutil create \
