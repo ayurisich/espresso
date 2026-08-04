@@ -2,15 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/getlantern/systray"
-)
-
-var (
-	hotFrames = []string{"☕", "♨️☕", "☕♨️"}
-	coldIcon  = "🥶☕"
-	warnIcon  = "⚠️☕"
 )
 
 func runTray(m *Manager) {
@@ -18,7 +11,8 @@ func runTray(m *Manager) {
 }
 
 func onReady(m *Manager) {
-	systray.SetTitle(coldIcon)
+	systray.SetIcon(coldIconPNG)
+	systray.SetTitle("")
 	systray.SetTooltip("Caffeinate Toggle")
 
 	mStatus := systray.AddMenuItem("○ Decaffeinated", "")
@@ -40,35 +34,14 @@ func onReady(m *Manager) {
 	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "")
 
-	var animDone chan struct{}
-
 	setOn := func() {
-		animDone = make(chan struct{})
-		done := animDone
-		go func() {
-			ticker := time.NewTicker(600 * time.Millisecond)
-			defer ticker.Stop()
-			frame := 0
-			for {
-				select {
-				case <-ticker.C:
-					systray.SetTitle(hotFrames[frame%len(hotFrames)])
-					frame++
-				case <-done:
-					return
-				}
-			}
-		}()
+		systray.SetIcon(hotIconPNG)
 		mStatus.SetTitle("● Caffeinated")
 		mToggle.SetTitle("Turn Off")
 	}
 
 	setOff := func() {
-		if animDone != nil {
-			close(animDone)
-			animDone = nil
-		}
-		systray.SetTitle(coldIcon)
+		systray.SetIcon(coldIconPNG)
 		mStatus.SetTitle("○ Decaffeinated")
 		mToggle.SetTitle("Turn On")
 	}
@@ -81,7 +54,7 @@ func onReady(m *Manager) {
 				setOff()
 			} else {
 				if err := m.Start(); err != nil {
-					systray.SetTitle(warnIcon)
+					setOff()
 				} else {
 					setOn()
 				}
@@ -110,10 +83,9 @@ func onReady(m *Manager) {
 
 func startTimed(m *Manager, hours int, setOn, setOff func()) {
 	if err := m.StartTimed(hours); err != nil {
-		systray.SetTitle(warnIcon)
 		setOff()
 		return
 	}
-	setOff() // stop existing animation goroutine before starting a new one
+	setOff()
 	setOn()
 }
