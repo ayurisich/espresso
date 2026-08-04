@@ -11,7 +11,7 @@ func runTray(m *Manager) {
 }
 
 func onReady(m *Manager) {
-	systray.SetIcon(coldIconPNG)
+	systray.SetTemplateIcon(coldIconPNG, coldIconPNG)
 	systray.SetTitle("")
 	systray.SetTooltip("Caffeinate Toggle")
 
@@ -35,13 +35,13 @@ func onReady(m *Manager) {
 	mQuit := systray.AddMenuItem("Quit", "")
 
 	setOn := func() {
-		systray.SetIcon(hotIconPNG)
+		systray.SetTemplateIcon(hotIconPNG, hotIconPNG)
 		mStatus.SetTitle("● Caffeinated")
 		mToggle.SetTitle("Turn Off")
 	}
 
 	setOff := func() {
-		systray.SetIcon(coldIconPNG)
+		systray.SetTemplateIcon(coldIconPNG, coldIconPNG)
 		mStatus.SetTitle("○ Decaffeinated")
 		mToggle.SetTitle("Turn On")
 	}
